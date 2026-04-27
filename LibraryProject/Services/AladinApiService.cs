@@ -70,6 +70,9 @@ namespace LibraryProject.Services
             return await response.Content.ReadFromJsonAsync<AladinSearchResponse>();
         }
     }
+    /// <summary>
+    /// API 응답정보를 담는 DTO 클래스
+    /// </summary>
     public class AladinSearchResponse
     {
         [JsonPropertyName("itemPerPage")]
@@ -84,6 +87,9 @@ namespace LibraryProject.Services
         [JsonPropertyName("item")]
         public List<BookItem> BookItems { get; set; }
     }
+    /// <summary>
+    /// 책의 정보를 담는 DTO 클래스
+    /// </summary>
     public class BookItem
     {
         [JsonPropertyName("cover")]
