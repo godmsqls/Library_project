@@ -1,4 +1,3 @@
-using LibraryProject.Controllers;
 using System;
 using System.Windows.Forms;
 
@@ -6,6 +5,8 @@ namespace LibraryProject.Views.Auth
 {
     public partial class Auth : Form
     {
+        public event EventHandler<(string id, string password)> LoginRequested;
+
         public Auth()
         {
             InitializeComponent();
@@ -17,16 +18,7 @@ namespace LibraryProject.Views.Auth
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if(txtId.Text == "admin" && txtPassword.Text == "admin")
-            {
-                new Librarian().Show(); 
-                this.Hide();
-            } 
-            else
-            {
-                this.Hide();
-                new UserView().Show();
-            }
+            LoginRequested?.Invoke(this, (txtId.Text, txtPassword.Text));
         }
     }
 }
