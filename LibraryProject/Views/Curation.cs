@@ -92,5 +92,10 @@ namespace LibraryProject.Views
                 flowRecommended.Controls.Add(btnBook);
             }
         }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
     }
 }

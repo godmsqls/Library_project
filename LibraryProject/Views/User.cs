@@ -148,5 +148,10 @@ namespace LibraryProject.Views
             dgvLoans.DataSource = null;
             dgvLoans.DataSource = loans;
         }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
     }
 }
