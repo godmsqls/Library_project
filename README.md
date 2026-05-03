@@ -75,26 +75,54 @@ LibrarySystem/
 
 
 
-### 4. Controllers (중간 이후 구현 예정)
-- View(화면)에서 발생한 이벤트를 Service로 전달, Service의 결과값을 다시 View로 전달할 것.
+### 4. Controllers (구현 진행 중)
 
-- **`AuthController.cs`**
-    - **기능:** 로그인 버튼 클릭 이벤트를 처리하고 화면을 전환합니다.
-    - **흐름:** View에서 ID/PW 전달받음 → `AuthService`에 검증 요청 → 사서면 `Librarian` 폼 열기, 유저면 `User` 폼 열기.
-    
-    
-- **`LibrarianController.cs`**
-    - **기능:** 사서 대시보드의 기능을 제어합니다.
-    - **흐름:** 폼이 로드될 때 `LibraryService.GetOverdueUsers()`를 호출하여 연체자 데이터를 View에 전달.
+현재 프로젝트는 View 내부에 존재하던 비즈니스 로직과 화면 전환 로직을 Controller로 완전히 위임하는 **이벤트 기반 MVC(Model-View-Controller) 아키텍처**로 개편되어 있습니다. 
+View(화면)에서 발생한 사용자 입력 이벤트를 Controller가 구독하고, Controller가 Service 로직을 호출한 뒤, 처리된 결과 데이터를 다시 View의 메서드를 통해 렌더링하는 형태로 데이터 흐름이 일방향으로 유지됩니다.
 
+#### 전체적인 동작 플로우 메커니즘
+1. **[View]** 사용자가 UI 요소(버튼, 텍스트박스 등) 조작
+2. **[View]** 자체적인 로직 처리 없이, 선언된 `Event` (예: `LoginRequested`, `SearchRequested`)를 발생시킴 (입력된 데이터를 이벤트 인자로 함께 전달)
+3. **[Controller]** 해당 View 초기화 당시 구독해 둔 이벤트 핸들러가 트리거됨
+4. **[Controller]** 이벤트로 전달받은 데이터를 검증하고, 필요한 `Service` (DB 조회, API 통신 등) 객체의 메서드를 호출
+5. **[Service]** 비즈니스 로직 수행 및 데이터 모델 가공 후 응답
+6. **[Controller]** Service로부터 반환된 데이터를 판단하여 분기 처리 (다른 View 열기, 에러 메시지 출력 등) 혹은 현재 View의 Public 렌더링 메서드(예: `DisplayBooks()`)로 데이터를 주입하여 위임
+7. **[View]** 주입된 데이터를 단순히 UI 컴포넌트(DataGridView 등)에 바인딩하여 화면 갱신
 
-- **`UserController.cs`**
-    - **기능:** 유저의 대출/반납 요청을 처리합니다.
-    - **흐름:** View에서 ISBN 입력 후 버튼 클릭 → `LibraryService.LoanBook/ReturnBook` 호출 → 성공/실패 메시지 View에 전달.
+---
 
+#### 각 Controller 기능 및 상세 흐름
 
-- **`CurationController.cs`**
-    - **기능:** 통계 및 추천 화면을 구성하기 위한 데이터를 준비합니다.
-    - **흐름:** 유저가 추천 탭 클릭 → `RecommendationService`에서 차트용 데이터와 추천 도서 리스트를 받아옴 → View에 데이터 전달.
+- **`AuthController.cs` (로그인 제어)**
+    - **기능:** 시스템의 첫 진입점으로써 사용자 로그인을 제어하고, 권한에 맞게 화면을 라우팅합니다.
+    - **상세 흐름:** 
+        1. 시스템 구동 시 `Auth` View(로그인 화면) 인스턴스 생성 및 화면 전환
+        2. View의 `LoginRequested` 이벤트 발생 감시
+        3. 이벤트가 수신되면 넘겨받은 `(ID, PW)`를 검증 체계(내부 로직 또는 `AuthService`)로 전송
+        4. 검증 결과가 '관리자(admin)'일 경우: 로그인 창 숨김 → `LibrarianController` 인스턴스 생성 및 사서 뷰(`ShowLibrarianView()`) 실행
+        5. 검증 결과가 '일반 유저'일 경우: 로그인 창 숨김 → `UserController` 인스턴스 생성 및 이용자 뷰(`ShowUserView()`) 실행
+
+- **`UserController.cs` (사용자 컨트롤러)**
+    - **기능:** 일반 유저용 화면 `UserView`를 렌더링하며 도서 검색, 대출/반납, 추천 도서 조회 등 유저가 수행하는 모든 화면 이벤트를 중계합니다.
+    - **상세 흐름:** 
+        - **화면 초기화:** `UserView`를 띄우면서 View의 이벤트(`SearchRequested`, `CurationRequested`) 구독. 외부 API인 `AladinApiService` 컨트롤러 내부 주입.
+        - **검색 로직:** 
+            1. 유저가 View에서 검색어 입력 후 '검색' 클릭
+            2. `SearchRequested` 이벤트 발생, Controller가 트리거됨
+            3. `AladinApiService.GetBooksByQuery(query)`를 비동기로 호출하여 알라딘 도서망 API와 통신
+            4. 서버 결괏값(`List<BookItem>`)을 수신하여 `UserView.DisplayBooks()`의 인자로 넘겨주어 화면(DataGridView)에 알라딘 검색 결과를 실시간 렌더링하도록 명령.
+        - **화면 전환 로직:** '추천 도서 보기' 클릭 시 `CurationRequested` 이벤트 수신 후 `CurationController` 혹은 `Curation` View를 호출하여 화면 전환.
+        - *(추후 추가 예정)* ISBN 기반 대출/반납 이벤트를 수신하여 `LibraryService.LoanBook/ReturnBook` 제어.
+
+- **`LibrarianController.cs` (사서 대시보드 제어)**
+    - **기능:** 도서관 관리자 화면 기능 및 대시보드를 캡슐화합니다.
+    - **상세 흐름:** 
+        1. `AuthController`에 의해 호출되어 `Librarian` View 렌더링
+        2. *(추후 추가 예정)* 폼 로드 이벤트를 구독하여 폼 로딩 시 `LibraryService.GetOverdueUsers()`를 호출
+        3. *(추후 추가 예정)* 반환받은 연체자 목록 리스트를 View의 표(DataGridView 등)에 공급하여 시각적으로 최신화 지시.
+
+- **`CurationController.cs` (도서 추천 화면 제어)**
+    - **기능:** 통계 차트 및 사용자 대출 패턴 기반 추천 도서 목록을 준비합니다.
+    - **상세 흐름:** 유저가 추천 탭 클릭 시 이벤트 전환 → `RecommendationService`에서 차트용 데이터 및 분야별 도서 리스트 연산 요청 → Curation View에 통계/추천 데이터 렌더링.
 
 ---
