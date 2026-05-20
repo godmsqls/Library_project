@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using LibraryProject.Views.Auth;
 using LibraryProject.Controllers;
+using LibraryProject.Models;
 
 namespace LibraryProject
 {
@@ -10,6 +11,7 @@ namespace LibraryProject
         [STAThread]
         static void Main(string[] args)
         {
+            User.PrintAllUsers();
             AuthController authController = new AuthController();
             authController.ShowAuthView();
         }

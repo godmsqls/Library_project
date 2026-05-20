@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using MySqlConnector;
+using System.Windows.Forms;
+
 namespace LibraryProject.Models
 {
     public class User
@@ -34,6 +39,76 @@ namespace LibraryProject.Models
             cmd.Parameters.AddWithValue("@email", this.Email);
             cmd.Parameters.AddWithValue("@role", this.Role);
             cmd.Parameters.AddWithValue("@preferCategory", this.PreferCategory);
+            cmd.ExecuteNonQuery();
+        }
+
+        //Login_id 로 유저 조회(반환)
+        public static User GetUser(string userLoginId)
+        {
+            var conn = Database.Connect(); //DB 연결
+            conn.Open();
+            using var cmd = conn.CreateCommand(); //쿼리 명령 생성
+            cmd.CommandText = "SELECT * FROM users WHERE userLoginId = @userLoginId";
+            cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
+
+            using var reader = cmd.ExecuteReader(); //쿼리 실행 결과 반환
+            if (reader.Read())
+            {
+                return new User( //실행 결과에 해당하는 User 객체 생성 후 반환
+                    userLoginId: reader.GetString("userLoginId"), //각 컬럼 값을 가져온다 ex) "userLoginId" 컬럼 값을 가져온다
+                    password: reader.GetString("password"),
+                    name: reader.GetString("name"),
+                    role: reader.GetString("role"),
+                    email: reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader.GetString("email"),
+                    preferCategory: reader.IsDBNull(reader.GetOrdinal("preferCategory")) ? null : reader.GetInt32("preferCategory")
+                );
+            }
+            return null;
+        }
+
+        // 모든 유저를 리스트로 받아서 반환
+        public static List<User> GetAllUsers()
+        {
+            var users = new List<User>(); //user들의 리스트
+            var conn = Database.Connect(); //쿼리 명령 생성
+            conn.Open();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT * FROM users";
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read()) //쿼리 결과를 한 줄 씩 읽으며
+            {
+                users.Add(new User( //결과에 해당하는 User 객체 생성 후 반환 -> list에 추가
+                    userLoginId: reader.GetString("userLoginId"),
+                    password: reader.GetString("password"),
+                    name: reader.GetString("name"),
+                    role: reader.GetString("role"),
+                    email: reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader.GetString("email"),
+                    preferCategory: reader.IsDBNull(reader.GetOrdinal("preferCategory")) ? null : reader.GetInt32("preferCategory")
+                ));
+            }
+            return users;
+        }
+
+
+        //유저 전체 목록 출력(테스트 용)
+        public static void PrintAllUsers()
+        {
+            List<User> users = GetAllUsers();
+            string result = $"=== 등록된 유저 목록 ({users.Count}명) ===\n";
+            foreach (var user in users)
+                result += $"ID: {user.UserLoginId} | 이름: {user.Name} | 권한: {user.Role}\n";
+
+            MessageBox.Show(result);
+        }
+
+        //유저 전체 삭제 (테스트 용)
+        public static void DeleteAllUsers()
+        {
+            var conn = Database.Connect();
+            conn.Open();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM users";
             cmd.ExecuteNonQuery();
         }
     }
