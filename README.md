@@ -33,8 +33,12 @@ LibrarySystem/
 ### 1. Models (데이터 계층)
 
 - **`User.cs`**
-    - **기능:** 시스템 사용자(사서 및 유저)의 기본 정보 담은 db
-    - **구현 속성:** `UserId` (키), `Password` (비밀번호), `Role` (사서/유저 구분용).
+    - **기능:** 시스템 사용자(사서 및 유저)의 기본 정보를 담고 있는 모델 및 데이터베이스 연동 클래스
+    - **구현 속성:** `UserId` (DB 자동 PK), `UserLoginId` (로그인 아이디), `Password` (비밀번호), `Name` (이름), `Role` (권한: Member/Admin), `Email` (이메일), `PreferCategory` (선호 도서 분야)
+    - **메서드:**
+        - `InsertUser()`: 현재 객체의 정보를 바탕으로 데이터베이스에 새로운 유저로 회원가입(저장)을 수행합니다.
+        - `GetUser(string userLoginId)`: 아이디로 데이터베이스를 조회 후 해당 정보를 담은 User 객체 반환.
+        - `GetAllUsers()`: 등록된 모든 유저를 리스트로 반환.
 - **`LoanRecord.cs`**
     - **기능:** 사용자의 도서 대출 및 반납 이력을 기록한 db
     - **구현 속성:** `LoanId` (키), `UserId` (외래키?), `Isbn` (대출한 책의 고유번호), `LoanDate` (대출일), `ReturnDate` (반납일, null이면 대출 중).
@@ -69,9 +73,14 @@ LibrarySystem/
 ### 3. Views (화면 관련 로직)
 
 - `Auth/` 
+    - `Auth.cs`: 진입 로그인 폼 화면. 유저로부터 정보를 입력받아 `LoginRequested`, `SignUpRequested` 이벤트를 발생시킵니다.
+    - `SignUp.cs`: 회원가입 폼 화면. 새 회원 정보를 입력받아 `SignUpSubmitted` 이벤트를 발생시킵니다.
 - `Librarian/`
+    - `Librarian.cs`: 사서 전용 대시보드 화면. 연체자 목록 조회와 관리를 위한 UI.
 - `User/` 
+    - `User.cs`: 도서 대출 및 반납, 검색 기능을 위한 탭 화면 UI. 도서 검색, 검색 결과 조회, 나의 대출 목록 표시 등을 지원하며 Controller와 렌더링을 위임받거나 이벤트를 퍼블리싱 합니다.
 - `Curation/` 
+    - `Curation.cs`: 도서 분야별 차트 및 추천 도서 표시 화면. 전달받은 대출 이력 데이터를 기반으로 통계 차트를 그리거나 비동기로 받아온 추천 목록을 그립니다.
 
 
 
@@ -93,14 +102,14 @@ View(화면)에서 발생한 사용자 입력 이벤트를 Controller가 구독�
 
 #### 각 Controller 기능 및 상세 흐름
 
-- **`AuthController.cs` (로그인 제어)**
-    - **기능:** 시스템의 첫 진입점으로써 사용자 로그인을 제어하고, 권한에 맞게 화면을 라우팅합니다.
+- **`AuthController.cs` (로그인 및 회원가입 제어)**
+    - **기능:** 시스템의 시작점으로써 사용자 로그인과 신규 회원가입을 제어하며, 확인된 권한에 맞춰 화면을 분기합니다.
     - **상세 흐름:** 
-        1. 시스템 구동 시 `Auth` View(로그인 화면) 인스턴스 생성 및 화면 전환
-        2. View의 `LoginRequested` 이벤트 발생 감시
-        3. 이벤트가 수신되면 넘겨받은 `(ID, PW)`를 검증 체계(내부 로직 또는 `AuthService`)로 전송
-        4. 검증 결과가 '관리자(admin)'일 경우: 로그인 창 숨김 → `LibrarianController` 인스턴스 생성 및 사서 뷰(`ShowLibrarianView()`) 실행
-        5. 검증 결과가 '일반 유저'일 경우: 로그인 창 숨김 → `UserController` 인스턴스 생성 및 이용자 뷰(`ShowUserView()`) 실행
+        1. 시스템 구동 시 `Auth` View(로그인 창) 인스턴스 생성 빛 애플리케이션 실행
+        2. 화면에서 회원가입 요청(`SignUpRequested`)이 오면 `SignUp` View를 띄우고, 회원가입 제출(`SignUpSubmitted`)이 발생하면 새 `User` 객체를 생성해 DB에 추가(`InsertUser`)
+        3. 로그인 요청(`LoginRequested`) 시 넘겨받은 아이디를 기반으로 `User.GetUser(id)`를 호출해 데이터를 확보하고 비밀번호 검증
+        4. 회원 권한이 'Admin' 일 경우: Auth 창을 숨기고 `LibrarianController` 인스턴스 생성 및 사서 뷰로 전환
+        5. 회원 권한이 'Member' 등 일반 유저일 경우: Auth 창을 숨기고 `UserController` 인스턴스 생성 및 일반 유저 뷰로 전환
 
 - **`UserController.cs` (사용자 컨트롤러)**
     - **기능:** 일반 유저용 화면 `UserView`를 렌더링하며 도서 검색, 대출/반납, 추천 도서 조회 등 유저가 수행하는 모든 화면 이벤트를 중계합니다.

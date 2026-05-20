@@ -10,6 +10,7 @@ namespace LibraryProject.Views.Auth
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             btnLogin = new System.Windows.Forms.Button();
+            btnSignUp = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // label1
@@ -65,7 +66,7 @@ namespace LibraryProject.Views.Auth
             // 
             btnLogin.BackColor = System.Drawing.SystemColors.ActiveCaption;
             btnLogin.Font = new System.Drawing.Font("Noto Sans KR Medium", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 129);
-            btnLogin.Location = new System.Drawing.Point(223, 165);
+            btnLogin.Location = new System.Drawing.Point(121, 165);
             btnLogin.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new System.Drawing.Size(90, 34);
@@ -73,10 +74,24 @@ namespace LibraryProject.Views.Auth
             btnLogin.Text = "로그인";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
+            //
+            // btnSignUp
+            //
+            btnSignUp.BackColor = System.Drawing.SystemColors.ButtonFace;
+            btnSignUp.Font = new System.Drawing.Font("Noto Sans KR Medium", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 129);
+            btnSignUp.Location = new System.Drawing.Point(223, 165);
+            btnSignUp.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            btnSignUp.Name = "btnSignUp";
+            btnSignUp.Size = new System.Drawing.Size(90, 34);
+            btnSignUp.TabIndex = 6;
+            btnSignUp.Text = "회원가입";
+            btnSignUp.UseVisualStyleBackColor = false;
+            btnSignUp.Click += btnSignUp_Click;
             // 
             // Auth
             // 
-            ClientSize = new System.Drawing.Size(332, 203);
+            ClientSize = new System.Drawing.Size(332, 220);
+            Controls.Add(btnSignUp);
             Controls.Add(btnLogin);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -95,5 +110,6 @@ namespace LibraryProject.Views.Auth
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Button btnSignUp;
     }
 }

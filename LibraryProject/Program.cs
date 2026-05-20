@@ -11,7 +11,7 @@ namespace LibraryProject
         [STAThread]
         static void Main(string[] args)
         {
-            User.PrintAllUsers();
+            //User.PrintAllUsers();
             AuthController authController = new AuthController();
             authController.ShowAuthView();
         }
