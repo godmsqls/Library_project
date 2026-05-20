@@ -6,6 +6,7 @@ namespace LibraryProject.Views.Auth
     public partial class Auth : Form
     {
         public event EventHandler<(string id, string password)> LoginRequested;
+        public event EventHandler SignUpRequested;
 
         public Auth()
         {
@@ -17,6 +18,11 @@ namespace LibraryProject.Views.Auth
         private void btnLogin_Click(object sender, EventArgs e)
         {
             LoginRequested?.Invoke(this, (txtId.Text, txtPassword.Text));
+        }
+
+        private void btnSignUp_Click(object sender, EventArgs e)
+        {
+            SignUpRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }
