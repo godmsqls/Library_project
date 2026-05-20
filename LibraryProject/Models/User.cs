@@ -11,7 +11,7 @@ namespace LibraryProject.Models
         public string UserLoginId { get; set; }         // 로그인 아이디
         public string Password { get; set; }
         public string Name { get; set; }
-        public string Role { get; set; }
+        public string Role { get; set; }            //'Member' 또는 'Admin' 만 가능
         public string Email { get; set; }
         public int? PreferCategory { get; set; }
 
