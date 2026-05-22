@@ -12,6 +12,7 @@ namespace LibraryProject
         static void Main(string[] args)
         {
             //User.PrintAllUsers();
+           // LoanRecord.PrintAllLoans();
             AuthController authController = new AuthController();
             authController.ShowAuthView();
         }
