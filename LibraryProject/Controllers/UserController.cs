@@ -42,7 +42,7 @@ namespace LibraryProject.Controllers
             
             if (_user != null)
             {
-                _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId));
+                _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
             }
 
             // 뷰 화면을 띄움
@@ -69,7 +69,7 @@ namespace LibraryProject.Controllers
                     );
                     Models.LoanRecord.InsertLoan(_user.UserId, bookDb, System.DateTime.Now.AddDays(14));
                     _view.ShowMessage($"'{book.Title}' 이(가) 대출되었습니다.");
-                    _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId));
+                    _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace LibraryProject.Controllers
                     {
                         Models.LoanRecord.ReturnBook(recordToReturn.LoanId);
                         _view.ShowMessage("도서가 반납되었습니다.");
-                        _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId));
+                        _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
                     }
                 }
                 else
