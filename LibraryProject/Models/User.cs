@@ -25,6 +25,10 @@ namespace LibraryProject.Models
             PreferCategory = preferCategory;
         }
 
+        public void SetUserId(int id)
+        {
+            UserId = id;
+        }
 
         // 유저 등록
         public void InsertUser()
@@ -45,23 +49,50 @@ namespace LibraryProject.Models
         //Login_id 로 유저 조회(반환)
         public static User GetUser(string userLoginId)
         {
-            var conn = Database.Connect(); //DB 연결
+            var conn = Database.Connect(); 
             conn.Open();
-            using var cmd = conn.CreateCommand(); //쿼리 명령 생성
+            using var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT * FROM users WHERE userLoginId = @userLoginId";
             cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
 
-            using var reader = cmd.ExecuteReader(); //쿼리 실행 결과 반환
+            using var reader = cmd.ExecuteReader(); 
             if (reader.Read())
             {
-                return new User( //실행 결과에 해당하는 User 객체 생성 후 반환
-                    userLoginId: reader.GetString("userLoginId"), //각 컬럼 값을 가져온다 ex) "userLoginId" 컬럼 값을 가져온다
+                var user = new User( 
+                    userLoginId: reader.GetString("userLoginId"),
                     password: reader.GetString("password"),
                     name: reader.GetString("name"),
                     role: reader.GetString("role"),
                     email: reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader.GetString("email"),
                     preferCategory: reader.IsDBNull(reader.GetOrdinal("preferCategory")) ? null : reader.GetInt32("preferCategory")
                 );
+                user.SetUserId(reader.GetInt32("UserId"));
+                return user;
+            }
+            return null;
+        }
+
+        public static User GetUserById(int userId)
+        {
+            var conn = Database.Connect(); 
+            conn.Open();
+            using var cmd = conn.CreateCommand(); 
+            cmd.CommandText = "SELECT * FROM users WHERE UserId = @userId";
+            cmd.Parameters.AddWithValue("@userId", userId);
+
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                var user = new User( 
+                    userLoginId: reader.GetString("userLoginId"),
+                    password: reader.GetString("password"),
+                    name: reader.GetString("name"),
+                    role: reader.GetString("role"),
+                    email: reader.IsDBNull(reader.GetOrdinal("email")) ? null : reader.GetString("email"),
+                    preferCategory: reader.IsDBNull(reader.GetOrdinal("preferCategory")) ? null : reader.GetInt32("preferCategory")
+                );
+                user.SetUserId(reader.GetInt32("UserId"));
+                return user;
             }
             return null;
         }

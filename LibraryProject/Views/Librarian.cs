@@ -11,6 +11,8 @@ namespace LibraryProject.Views
         private Panel pnlBottom;
         private Button btnNotify;
 
+        public event System.EventHandler NotifyRequested;
+
         public Librarian()
         {
             // 2. 레이아웃 설정 메서드 호출
@@ -53,6 +55,8 @@ namespace LibraryProject.Views
                 Size = new Size(120, 30)
             };
 
+            btnNotify.Click += (s, e) => NotifyRequested?.Invoke(this, System.EventArgs.Empty);
+
             pnlBottom.Controls.Add(btnNotify);
 
             // 컨트롤 추가 (중복 방지를 위해 Clear 후 추가하거나 순서대로 추가)
@@ -60,6 +64,16 @@ namespace LibraryProject.Views
             this.Controls.Add(dgvOverdue);
             this.Controls.Add(lblHeader);
             this.Controls.Add(pnlBottom);
+        }
+
+        public void DisplayOverdueLoans(System.Collections.Generic.List<Models.LoanRecord> overdueLoans)
+        {
+            dgvOverdue.DataSource = overdueLoans;
+        }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message, "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

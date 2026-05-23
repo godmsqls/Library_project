@@ -14,10 +14,12 @@ namespace LibraryProject.Controllers
         private RecommendationService _recommendationService;
         // 대출 내역 조회 등을 위한 라이브러리 서비스 인스턴스
         private LibraryService _libraryService;
+        private Models.User _user;
 
         // CurationController 생성자
-        public CurationController(LibraryService libraryService)
+        public CurationController(LibraryService libraryService, Models.User user = null)
         {
+            _user = user;
             // 외부에서 주입받은 libraryService를 내부에 저장
             _libraryService = libraryService;
             // Aladin API를 이용해 도서 추천 시스템 서비스 초기화
@@ -36,7 +38,35 @@ namespace LibraryProject.Controllers
             try
             {
                 // 라이브러리 서비스에서 이전 대출 내역(History)을 가져옴
-                var history = _libraryService.GetLoanHistory();
+                System.Collections.Generic.List<Models.LoanRecord> history;
+                if (_user != null)
+                {
+                    history = Models.LoanRecord.GetLoansByUser(_user.UserId);
+                    var apiService = new AladinApiService(new HttpClient());
+                    foreach (var record in history)
+                    {
+                        if (long.TryParse(record.Isbn13, out long isbn13))
+                        {
+                            try
+                            {
+                                var response = await apiService.GetBookInfoAsync(isbn13);
+                                if (response != null && response.BookItems != null && response.BookItems.Count > 0)
+                                {
+                                    record.CategoryName = response.BookItems[0].CategoryName;
+                                }
+                            }
+                            catch
+                            {
+                                // 무시하고 다음으로 진행
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    history = _libraryService.GetLoanHistory();
+                }
+                
                 // 조회된 기록을 통계 데이터 형태로 뷰에 표시
                 _view.DisplayStatistics(history);
 
