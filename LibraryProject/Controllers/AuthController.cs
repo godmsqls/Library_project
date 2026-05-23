@@ -62,7 +62,7 @@ namespace LibraryProject.Controllers
                     else
                     {
                         // 사용자 전용 컨트롤러를 생성하고 사용자 뷰를 표시
-                        new UserController().ShowUserView();
+                        new UserController(user).ShowUserView();
                     }
                 } 
                 else
