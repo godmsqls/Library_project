@@ -47,7 +47,7 @@ namespace LibraryProject.Services
         /// 분야 코드(categoryCode)를 기반으로 베스트셀러 목록을 가져옵니다.
         /// categoryCode의 기본 값은 0(전체)입니다.
         /// </summary>
-        public async Task<AladinSearchResponse> GetBestsellersAsync(string categoryCode = "0")
+        public async Task<AladinSearchResponse> GetBestsellersAsync(int categoryCode = 0)
         {
             string url = $"http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={_apiKey}&QueryType=Bestseller&MaxResults=10&start=1&SearchTarget=Book&CategoryId={categoryCode}&output=js&Version=20131101";
 
@@ -61,7 +61,7 @@ namespace LibraryProject.Services
         /// 분야 코드(categoryCode)를 기반으로 신간 도서 목록을 가져옵니다.
         /// categoryCode의 기본 값은 0(전체)입니다.
         /// </summary>
-        public async Task<AladinSearchResponse> GetNewBooksAsync(string categoryCode = "0")
+        public async Task<AladinSearchResponse> GetNewBooksAsync(int categoryCode = 0)
         {
             string url = $"http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey={_apiKey}&QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&CategoryId={categoryCode}&output=js&Version=20131101";
 
