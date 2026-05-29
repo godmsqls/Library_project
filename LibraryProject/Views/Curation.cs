@@ -89,6 +89,7 @@ namespace LibraryProject.Views
                     Margin = new Padding(10),
                     TextAlign = ContentAlignment.MiddleCenter
                 };
+                //btnBook.Click += OnButtonClicked;
                 flowRecommended.Controls.Add(btnBook);
             }
         }

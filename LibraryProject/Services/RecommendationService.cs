@@ -19,13 +19,17 @@ namespace LibraryProject.Services
 
         public RecommendationService(AladinApiService apiService)
         {
-            CategorySetup categorySetup = new CategorySetup();
-            map = categorySetup.InitializeAsync().Result;
             _apiService = apiService;
         }
 
         public async Task<List<BookItem>> GetRecommendationsAsync(List<LoanRecord> loanHistory)
         {//List<LoanRecord> ->잘 읽는 카테고리 모으기->인터넷에서 ->List<BookItem>
+            if(map == null)
+            {
+                CategorySetup categorySetup = new CategorySetup();
+                map = await categorySetup.InitializeAsync();
+
+            }
 
             //기록 없으면 그냥 0번 기준으로 조회 후 리턴
             if (loanHistory == null || loanHistory.Count == 0)
@@ -56,7 +60,7 @@ namespace LibraryProject.Services
             Dictionary<int, int> record = categoryRead.ToDictionary();
             List<int> keyList = categoryRead.Keys.ToList();
             //minor
-            mostMinorCategory = record.Max().Key;
+            mostMinorCategory = record.Aggregate((l,r) => l.Value > r.Value ? l : r).Key;
             //sub
             foreach (int key in keyList)
             {
@@ -73,7 +77,7 @@ namespace LibraryProject.Services
                 }
                 record.Remove(key);
             }
-            mostSubCategory = record.Max().Key;
+            mostSubCategory = record.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
             //main
             keyList = record.Keys.ToList();
             foreach (int key in keyList)
@@ -87,25 +91,27 @@ namespace LibraryProject.Services
                 }
                 record.Remove(key);
             }
-            mostMainCategory = record.Max().Key;
+            mostMainCategory = record.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
 
             List<BookItem> recommendations = new List<BookItem>();
 
             var searchResponse = await _apiService.GetBestsellersAsync(mostMinorCategory);
             recommendations.AddRange(searchResponse.BookItems?.
-                Where(b => !recommendations.Contains(b) && !loanHistory.Exists(h=>h.Isbn13 == b.Isbn13))
-                .Take(2)
-                .ToList() ?? new List<BookItem>());
+                Where(b => !recommendations.Any(r => b.Isbn13 == r.Isbn13) && !loanHistory.Exists(h=>h.Isbn13 == b.Isbn13)).
+                Take(2).
+                ToList() ?? new List<BookItem>());
 
             searchResponse = await _apiService.GetBestsellersAsync(mostSubCategory);
-            recommendations.AddRange(searchResponse.BookItems?.Where(b => !recommendations.Contains(b) && !loanHistory.Exists(h => h.Isbn13 == b.Isbn13))
-                .Take(2)
-                .ToList() ?? new List<BookItem>());
+            recommendations.AddRange(searchResponse.BookItems?.
+                Where(b => !recommendations.Any(r => b.Isbn13 == r.Isbn13) && !loanHistory.Exists(h => h.Isbn13 == b.Isbn13)).
+                Take(2).
+                ToList() ?? new List<BookItem>());
 
             searchResponse = await _apiService.GetBestsellersAsync(mostMainCategory);
-            recommendations.AddRange(searchResponse.BookItems?.Where(b => !recommendations.Contains(b) && !loanHistory.Exists(h => h.Isbn13 == b.Isbn13))
-                .Take(2)
-                .ToList() ?? new List<BookItem>());
+            recommendations.AddRange(searchResponse.BookItems?.
+                Where(b => !recommendations.Any(r => b.Isbn13 == r.Isbn13) && !loanHistory.Exists(h => h.Isbn13 == b.Isbn13)).
+                Take(2).
+                ToList() ?? new List<BookItem>());
 
             
             if (recommendations.Count < 6)
@@ -129,7 +135,7 @@ namespace LibraryProject.Services
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
             string html = await _httpClient.GetStringAsync(BLOG_URL);
             string sheetId = GetSheetId(html);
-            if (sheetId != null && IsUpdateNeeded(sheetId).Result)
+            if (sheetId != null && IsUpdateNeeded(sheetId))
             {
                 await SetNewCategoryAsync(sheetId);
             }
@@ -144,10 +150,10 @@ namespace LibraryProject.Services
             }
             return null;
         }
-        private async Task<bool> IsUpdateNeeded(string sheetId)
+        private bool IsUpdateNeeded(string sheetId)
         {
             if (!File.Exists(META_PATH)) return true;
-            var storedSheetId = await File.ReadAllTextAsync(META_PATH);
+            var storedSheetId = File.ReadAllText(META_PATH);
             return storedSheetId != sheetId;
         }
         private async Task SetNewCategoryAsync(string sheetId)

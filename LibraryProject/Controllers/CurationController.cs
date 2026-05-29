@@ -12,6 +12,7 @@ namespace LibraryProject.Controllers
         private Curation _view;
         // 도서 추천 서비스 연결용 인스턴스
         private RecommendationService _recommendationService;
+        private AladinApiService _apiService;
         // 대출 내역 조회 등을 위한 라이브러리 서비스 인스턴스
         private LibraryService _libraryService;
         private Models.User _user;
@@ -22,8 +23,9 @@ namespace LibraryProject.Controllers
             _user = user;
             // 외부에서 주입받은 libraryService를 내부에 저장
             _libraryService = libraryService;
+            _apiService = new AladinApiService(new HttpClient());
             // Aladin API를 이용해 도서 추천 시스템 서비스 초기화
-            _recommendationService = new RecommendationService(new AladinApiService(new HttpClient()));
+            _recommendationService = new RecommendationService(_apiService);
         }
 
         // Curation 화면을 비동기적으로 보여주는 메서드
@@ -42,14 +44,14 @@ namespace LibraryProject.Controllers
                 if (_user != null)
                 {
                     history = Models.LoanRecord.GetLoansByUser(_user.UserId);
-                    var apiService = new AladinApiService(new HttpClient());
+
                     foreach (var record in history)
                     {
                         if (long.TryParse(record.Isbn13, out long isbn13))
                         {
                             try
                             {
-                                var response = await apiService.GetBookInfoAsync(isbn13);
+                                var response = await _apiService.GetBookInfoAsync(isbn13);
                                 if (response != null && response.BookItems != null && response.BookItems.Count > 0)
                                 {
                                     record.CategoryName = response.BookItems[0].CategoryName;
