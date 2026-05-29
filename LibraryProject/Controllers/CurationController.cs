@@ -16,9 +16,11 @@ namespace LibraryProject.Controllers
         // 대출 내역 조회 등을 위한 라이브러리 서비스 인스턴스
         private LibraryService _libraryService;
         private Models.User _user;
+        //대출 내역 업데이트를 위한 유저뷰
+        private UserView _userView;
 
         // CurationController 생성자
-        public CurationController(LibraryService libraryService, Models.User user = null)
+        public CurationController(LibraryService libraryService, Models.User user = null, UserView userView = null)
         {
             _user = user;
             // 외부에서 주입받은 libraryService를 내부에 저장
@@ -26,6 +28,7 @@ namespace LibraryProject.Controllers
             _apiService = new AladinApiService(new HttpClient());
             // Aladin API를 이용해 도서 추천 시스템 서비스 초기화
             _recommendationService = new RecommendationService(_apiService);
+            _userView = userView;
         }
 
         // Curation 화면을 비동기적으로 보여주는 메서드
@@ -33,6 +36,8 @@ namespace LibraryProject.Controllers
         {
             // 큐레이션 뷰 생성
             _view = new Curation();
+
+            _view.CurationLoanRequested += View_LoanRequested;
             // 화면 띄우기
             _view.Show();
 
@@ -82,6 +87,43 @@ namespace LibraryProject.Controllers
             {
                 // 실패 메시지와 예외 메시지를 뷰에 띄워줌
                 _view.ShowMessage($"추천 도서를 가져오는 중 오류가 발생했습니다: {ex.Message}");
+            }
+        }
+        private void View_LoanRequested(object sender, BookItem book)
+        {
+            // 오류가 발생할 수 있는 로직을 try-catch 블록으로 감쌈
+            try
+            {
+                if (_user != null)
+                {
+                    var bookDb = new Models.Book(
+                        book.Isbn13,
+                        book.Title,
+                        book.Author,
+                        book.Publisher,
+                        null,
+                        book.CategoryId,
+                        book.CoverLink,
+                        book.Description
+                    );
+                    Models.LoanRecord.InsertLoan(_user.UserId, bookDb, System.DateTime.Now.AddDays(14));
+                    _view.ShowMessage($"'{book.Title}' 이(가) 대출되었습니다.");
+                    if(_userView != null)
+                        _userView.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
+                }
+                else
+                {
+                    _libraryService.LoanBook(book);
+                    _view.ShowMessage($"'{book.Title}' 이(가) 대출되었습니다.");
+                    if(_userView != null)
+                        _userView.DisplayLoans(_libraryService.GetCurrentLoans());
+                }
+            }
+            // 에러 발생 시 예외 객체 포획
+            catch (System.Exception ex)
+            {
+                // 에러 메시지를 뷰에 표시
+                _view.ShowMessage(ex.Message);
             }
         }
     }

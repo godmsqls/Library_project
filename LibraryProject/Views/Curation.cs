@@ -12,6 +12,7 @@ namespace LibraryProject.Views
     {
         private FlowLayoutPanel flowRecommended;
         private Panel pnlChartBase;
+        public event EventHandler<BookItem> CurationLoanRequested;
 
         public Curation()
         {
@@ -28,6 +29,7 @@ namespace LibraryProject.Views
             flowRecommended = new FlowLayoutPanel { Location = new Point(30, 300), Size = new Size(620, 250), AutoScroll = true };
 
             this.Controls.AddRange(new Control[] { lblChart, pnlChartBase, lblRecommend, flowRecommended });
+
         }
 
         private List<LoanRecord> _history = new List<LoanRecord>();
@@ -89,7 +91,10 @@ namespace LibraryProject.Views
                     Margin = new Padding(10),
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                //btnBook.Click += OnButtonClicked;
+                btnBook.Click += (s, e) =>
+                {
+                    CurationLoanRequested?.Invoke(this, book);
+                };
                 flowRecommended.Controls.Add(btnBook);
             }
         }

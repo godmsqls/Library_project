@@ -137,7 +137,7 @@ namespace LibraryProject.Controllers
         // 도서 추천(Curation) 요청 시 실행되는 이벤트 핸들러
         private void View_CurationRequested(object sender, System.EventArgs e)
         {
-            var curationController = new CurationController(_libraryService, _user);
+            var curationController = new CurationController(_libraryService, _user, _view);
             curationController.ShowCurationView();
         }
     }
