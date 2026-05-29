@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,7 +8,7 @@ namespace LibraryProject.Views
 {
     public class UserView : Form
     {
-        // 1. ¸â¹ö º¯¼ö ¼±¾ğ
+        // 1. ë©¤ë²„ ë³€ìˆ˜ ì„ ì–¸
         private TabControl tabControl1;
         private TabPage tabLoan;
         private TabPage tabReturn;
@@ -17,7 +17,7 @@ namespace LibraryProject.Views
         private DataGridView dgvBooks;
         private DataGridView dgvLoans;
 
-        // View -> Controller ÀÌº¥Æ® Á¤ÀÇ
+        // View -> Controller ì´ë²¤íŠ¸ ì •ì˜
         public event EventHandler<string> SearchRequested;
         public event EventHandler CurationRequested;
         public event EventHandler<BookItem> LoanRequested;
@@ -25,31 +25,31 @@ namespace LibraryProject.Views
 
         public UserView()
         {
-            // 2. UI ÃÊ±âÈ­ ÇÔ¼ö È£Ãâ
+            // 2. UI ì´ˆê¸°í™” í•¨ìˆ˜ í˜¸ì¶œ
             SetupLayout();
 
-            this.Text = "»ç¿ëÀÚ ¼­ºñ½º - µµ¼­ ´ëÃâ/¹İ³³";
+            this.Text = "ì‚¬ìš©ì ì„œë¹„ìŠ¤ - ë„ì„œ ëŒ€ì¶œ/ë°˜ë‚©";
             this.Size = new Size(600, 450);
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // 3. ÇÁ·Î¼¼½º Á¾·á ÀÌº¥Æ® (Àá±è Çö»ó ¹æÁö)
+            // 3. í”„ë¡œì„¸ìŠ¤ ì¢…ë£Œ ì´ë²¤íŠ¸ (ì ê¹€ í˜„ìƒ ë°©ì§€)
             this.FormClosed += (s, e) => Application.Exit();
         }
 
         private void SetupLayout()
         {
             tabControl1 = new TabControl { Dock = DockStyle.Fill };
-            tabLoan = new TabPage("µµ¼­ ´ëÃâ");
-            tabReturn = new TabPage("µµ¼­ ¹İ³³");
+            tabLoan = new TabPage("ë„ì„œ ëŒ€ì¶œ");
+            tabReturn = new TabPage("ë„ì„œ ë°˜ë‚©");
 
-            // µµ¼­ °Ë»ö ÅØ½ºÆ®¹Ú½º¿Í ¹öÆ°
+            // ë„ì„œ ê²€ìƒ‰ í…ìŠ¤íŠ¸ë°•ìŠ¤ì™€ ë²„íŠ¼
             txtSearch = new TextBox { Location = new Point(20, 20), Width = 300 };
-            Button btnSearch = new Button { Text = "°Ë»ö", Location = new Point(330, 20), Size = new Size(80, 25) };
+            Button btnSearch = new Button { Text = "ê²€ìƒ‰", Location = new Point(330, 20), Size = new Size(80, 25) };
             btnSearch.Click += (s, e) => {
                 SearchRequested?.Invoke(this, txtSearch.Text);
             };
 
-            // °Ë»ö °á°ú DataGridView
+            // ê²€ìƒ‰ ê²°ê³¼ DataGridView
             dgvBooks = new DataGridView 
             { 
                 Location = new Point(20, 60), 
@@ -64,8 +64,8 @@ namespace LibraryProject.Views
             tabLoan.Controls.Add(btnSearch);
             tabLoan.Controls.Add(dgvBooks);
 
-            // ´ëÃâ ¹öÆ°
-            Button btnLoanAction = new Button { Text = "¼±ÅÃ µµ¼­ ´ëÃâ", Location = new Point(430, 300), Size = new Size(120, 40) };
+            // ëŒ€ì¶œ ë²„íŠ¼
+            Button btnLoanAction = new Button { Text = "ì„ íƒ ë„ì„œ ëŒ€ì¶œ", Location = new Point(430, 300), Size = new Size(120, 40) };
             btnLoanAction.Click += (s, e) => {
                 if (dgvBooks.SelectedRows.Count > 0)
                 {
@@ -80,13 +80,13 @@ namespace LibraryProject.Views
                 }
                 else
                 {
-                    MessageBox.Show("´ëÃâÇÒ µµ¼­¸¦ ¼±ÅÃÇÏ¼¼¿ä.");
+                    MessageBox.Show("ëŒ€ì¶œí•  ë„ì„œë¥¼ ì„ íƒí•˜ì„¸ìš”.");
                 }
             };
             tabLoan.Controls.Add(btnLoanAction);
 
-            // ÃßÃµ µµ¼­ ¹öÆ°
-            Button btnGoCuration = new Button { Text = "ÃßÃµ µµ¼­ º¸±â", Location = new Point(20, 300), Size = new Size(120, 40), BackColor = Color.LightGreen };
+            // ì¶”ì²œ ë„ì„œ ë²„íŠ¼
+            Button btnGoCuration = new Button { Text = "ì¶”ì²œ ë„ì„œ ë³´ê¸°", Location = new Point(20, 300), Size = new Size(120, 40), BackColor = Color.LightGreen };
             btnGoCuration.Click += (s, e) => {
                 CurationRequested?.Invoke(this, EventArgs.Empty);
             };
@@ -96,7 +96,7 @@ namespace LibraryProject.Views
             tabControl1.TabPages.Add(tabReturn);
             this.Controls.Add(tabControl1);
 
-            // ¹İ³³ ÅÇ UI ±¸¼º
+            // ë°˜ë‚© íƒ­ UI êµ¬ì„±
             dgvLoans = new DataGridView 
             { 
                 Location = new Point(20, 20), 
@@ -108,7 +108,7 @@ namespace LibraryProject.Views
             };
             tabReturn.Controls.Add(dgvLoans);
 
-            Button btnReturnAction = new Button { Text = "¼±ÅÃ µµ¼­ ¹İ³³", Location = new Point(430, 300), Size = new Size(120, 40) };
+            Button btnReturnAction = new Button { Text = "ì„ íƒ ë„ì„œ ë°˜ë‚©", Location = new Point(430, 300), Size = new Size(120, 40) };
             btnReturnAction.Click += (s, e) => {
                 if (dgvLoans.SelectedRows.Count > 0)
                 {
@@ -123,7 +123,7 @@ namespace LibraryProject.Views
                 }
                 else
                 {
-                    MessageBox.Show("¹İ³³ÇÒ µµ¼­¸¦ ¼±ÅÃÇÏ¼¼¿ä.");
+                    MessageBox.Show("ë°˜ë‚©í•  ë„ì„œë¥¼ ì„ íƒí•˜ì„¸ìš”.");
                 }
             };
             tabReturn.Controls.Add(btnReturnAction);
@@ -136,7 +136,7 @@ namespace LibraryProject.Views
             };
         }
 
-        // Controller¿¡¼­ È£ÃâÇÒ ¸Ş¼­µå: °Ë»ö °á°ú Ç¥½Ã
+        // Controllerì—ì„œ í˜¸ì¶œí•  ë©”ì„œë“œ: ê²€ìƒ‰ ê²°ê³¼ í‘œì‹œ
         public void DisplayBooks(List<BookItem> books)
         {
             dgvBooks.DataSource = null;

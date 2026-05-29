@@ -38,7 +38,7 @@ namespace LibraryProject.Views.Auth
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new System.Drawing.Size(95, 35);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "»∏ø¯∞°¿‘";
+            lblTitle.Text = "ÌöåÏõêÍ∞ÄÏûÖ";
             // 
             // lblId
             // 
@@ -47,7 +47,7 @@ namespace LibraryProject.Views.Auth
             lblId.Name = "lblId";
             lblId.Size = new System.Drawing.Size(52, 20);
             lblId.TabIndex = 1;
-            lblId.Text = "æ∆¿Ãµ";
+            lblId.Text = "ÏïÑÏù¥Îîî";
             // 
             // lblPassword
             // 
@@ -56,7 +56,7 @@ namespace LibraryProject.Views.Auth
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new System.Drawing.Size(67, 20);
             lblPassword.TabIndex = 2;
-            lblPassword.Text = "∫Òπ–π¯»£";
+            lblPassword.Text = "ÎπÑÎ∞ÄÎ≤àÌò∏";
             // 
             // lblName
             // 
@@ -65,7 +65,7 @@ namespace LibraryProject.Views.Auth
             lblName.Name = "lblName";
             lblName.Size = new System.Drawing.Size(37, 20);
             lblName.TabIndex = 3;
-            lblName.Text = "¿Ã∏ß";
+            lblName.Text = "Ïù¥Î¶Ñ";
             // 
             // lblEmail
             // 
@@ -74,7 +74,7 @@ namespace LibraryProject.Views.Auth
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new System.Drawing.Size(52, 20);
             lblEmail.TabIndex = 4;
-            lblEmail.Text = "¿Ã∏ﬁ¿œ";
+            lblEmail.Text = "Ïù¥Î©îÏùº";
             // 
             // lblRole
             // 
@@ -83,7 +83,7 @@ namespace LibraryProject.Views.Auth
             lblRole.Name = "lblRole";
             lblRole.Size = new System.Drawing.Size(37, 20);
             lblRole.TabIndex = 5;
-            lblRole.Text = "±««—";
+            lblRole.Text = "Í∂åÌïú";
             // 
             // txtId
             // 
@@ -131,7 +131,7 @@ namespace LibraryProject.Views.Auth
             btnSubmit.Name = "btnSubmit";
             btnSubmit.Size = new System.Drawing.Size(90, 40);
             btnSubmit.TabIndex = 11;
-            btnSubmit.Text = "∞°¿‘«œ±‚";
+            btnSubmit.Text = "Í∞ÄÏûÖÌïòÍ∏∞";
             btnSubmit.UseVisualStyleBackColor = false;
             btnSubmit.Click += btnSubmit_Click;
             // 
@@ -141,7 +141,7 @@ namespace LibraryProject.Views.Auth
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new System.Drawing.Size(90, 40);
             btnCancel.TabIndex = 12;
-            btnCancel.Text = "√Îº“";
+            btnCancel.Text = "Ï∑®ÏÜå";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
@@ -162,7 +162,7 @@ namespace LibraryProject.Views.Auth
             Controls.Add(lblId);
             Controls.Add(lblTitle);
             Name = "SignUp";
-            Text = "»∏ø¯∞°¿‘";
+            Text = "ÌöåÏõêÍ∞ÄÏûÖ";
             ResumeLayout(false);
             PerformLayout();
         }

@@ -1,11 +1,11 @@
-using System.Drawing;
+ï»¿using System.Drawing;
 using System.Windows.Forms;
 
 namespace LibraryProject.Views
 {
     public class Librarian : Form
     {
-        // 1. UI ÄÁÆ®·ÑÀ» ¸â¹ö º¯¼ö·Î ¼±¾ğÇÏ¿© °ü¸®
+        // 1. UI ì»¨íŠ¸ë¡¤ì„ ë©¤ë²„ ë³€ìˆ˜ë¡œ ì„ ì–¸í•˜ì—¬ ê´€ë¦¬
         private Label lblHeader;
         private DataGridView dgvOverdue;
         private Panel pnlBottom;
@@ -15,42 +15,42 @@ namespace LibraryProject.Views
 
         public Librarian()
         {
-            // 2. ·¹ÀÌ¾Æ¿ô ¼³Á¤ ¸Ş¼­µå È£Ãâ
+            // 2. ë ˆì´ì•„ì›ƒ ì„¤ì • ë©”ì„œë“œ í˜¸ì¶œ
             SetupLayout();
 
-            this.Text = "»ç¼­ °ü¸® ¸ğµå - ¿¬Ã¼ÀÚ °ü¸®";
+            this.Text = "ì‚¬ì„œ ê´€ë¦¬ ëª¨ë“œ - ì—°ì²´ì ê´€ë¦¬";
             this.Size = new Size(800, 500);
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // 3. ÆûÀÌ ´İÈú ¶§ ÇÁ·Î¼¼½º¸¦ ¿ÏÀüÈ÷ Á¾·á (ÆÄÀÏ Àá±è ¹æÁö)
+            // 3. í¼ì´ ë‹«í ë•Œ í”„ë¡œì„¸ìŠ¤ë¥¼ ì™„ì „íˆ ì¢…ë£Œ (íŒŒì¼ ì ê¹€ ë°©ì§€)
             this.FormClosed += (s, e) => Application.Exit();
         }
 
         private void SetupLayout()
         {
-            // Çì´õ ¶óº§ ¼³Á¤
+            // í—¤ë” ë¼ë²¨ ì„¤ì •
             lblHeader = new Label
             {
-                Text = "¿¬Ã¼ÀÚ °ü¸® ´ë½Ãº¸µå",
+                Text = "ì—°ì²´ì ê´€ë¦¬ ëŒ€ì‹œë³´ë“œ",
                 Font = new Font("Noto Sans KR", 14),
                 Dock = DockStyle.Top,
                 Height = 50,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            // ¿¬Ã¼ÀÚ ¸ñ·Ï ±×¸®µåºä ¼³Á¤
+            // ì—°ì²´ì ëª©ë¡ ê·¸ë¦¬ë“œë·° ì„¤ì •
             dgvOverdue = new DataGridView
             {
                 Dock = DockStyle.Fill,
                 BackgroundColor = Color.White
             };
-            // µ¥ÀÌÅÍ ¹ÙÀÎµù ¿¹½Ã: dgvOverdue.DataSource = overdueList;
+            // ë°ì´í„° ë°”ì¸ë”© ì˜ˆì‹œ: dgvOverdue.DataSource = overdueList;
 
-            // ÇÏ´Ü ÆĞ³Î ¹× ¹öÆ° ¼³Á¤
+            // í•˜ë‹¨ íŒ¨ë„ ë° ë²„íŠ¼ ì„¤ì •
             pnlBottom = new Panel { Dock = DockStyle.Bottom, Height = 60 };
             btnNotify = new Button
             {
-                Text = "¿¬Ã¼ ¾Ë¸² ¹ß¼Û",
+                Text = "ì—°ì²´ ì•Œë¦¼ ë°œì†¡",
                 Location = new Point(650, 15),
                 Size = new Size(120, 30)
             };
@@ -59,7 +59,7 @@ namespace LibraryProject.Views
 
             pnlBottom.Controls.Add(btnNotify);
 
-            // ÄÁÆ®·Ñ Ãß°¡ (Áßº¹ ¹æÁö¸¦ À§ÇØ Clear ÈÄ Ãß°¡ÇÏ°Å³ª ¼ø¼­´ë·Î Ãß°¡)
+            // ì»¨íŠ¸ë¡¤ ì¶”ê°€ (ì¤‘ë³µ ë°©ì§€ë¥¼ ìœ„í•´ Clear í›„ ì¶”ê°€í•˜ê±°ë‚˜ ìˆœì„œëŒ€ë¡œ ì¶”ê°€)
             this.Controls.Clear();
             this.Controls.Add(dgvOverdue);
             this.Controls.Add(lblHeader);
@@ -73,7 +73,7 @@ namespace LibraryProject.Views
 
         public void ShowMessage(string message)
         {
-            MessageBox.Show(message, "¾Ë¸²", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(message, "ì•Œë¦¼", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

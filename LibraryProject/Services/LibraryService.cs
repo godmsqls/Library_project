@@ -15,7 +15,7 @@ namespace LibraryProject.Services
         {
             if (_currentLoans.Any(l => l.Isbn13 == book.Isbn13))
             {
-                throw new Exception("ÀÌ¹Ì ´ëÃâÁßÀÎ µµ¼­ÀÔ´Ï´Ù.");
+                throw new Exception("ì´ë¯¸ ëŒ€ì¶œì¤‘ì¸ ë„ì„œì…ë‹ˆë‹¤.");
             }
 
             var record = new LoanRecord

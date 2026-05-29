@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,15 +15,15 @@ namespace LibraryProject.Views
 
         public Curation()
         {
-            this.Text = "∏¬√„ µµº≠ √ﬂ√µ";
+            this.Text = "ÎßûÏ∂§ ÎèÑÏÑú Ï∂îÏ≤ú";
             this.Size = new Size(700, 600);
 
-            Label lblChart = new Label { Text = "¥Î√‚ ≈Î∞Ë", Location = new Point(30, 20), AutoSize = true, Font = new Font("Arial", 12, FontStyle.Bold) };
+            Label lblChart = new Label { Text = "ÎåÄÏ∂ú ÌÜµÍ≥Ñ", Location = new Point(30, 20), AutoSize = true, Font = new Font("Arial", 12, FontStyle.Bold) };
 
             pnlChartBase = new Panel { Location = new Point(30, 50), Size = new Size(620, 200), BorderStyle = BorderStyle.FixedSingle, BackColor = Color.GhostWhite };
             pnlChartBase.Paint += PnlChartBase_Paint;
 
-            Label lblRecommend = new Label { Text = "AI √ﬂ√µ µµº≠", Location = new Point(30, 270), AutoSize = true, Font = new Font("Arial", 12, FontStyle.Bold) };
+            Label lblRecommend = new Label { Text = "AI Ï∂îÏ≤ú ÎèÑÏÑú", Location = new Point(30, 270), AutoSize = true, Font = new Font("Arial", 12, FontStyle.Bold) };
 
             flowRecommended = new FlowLayoutPanel { Location = new Point(30, 300), Size = new Size(620, 250), AutoScroll = true };
 
@@ -42,7 +42,7 @@ namespace LibraryProject.Views
         {
             if (_history == null || _history.Count == 0)
             {
-                e.Graphics.DrawString("¥Î√‚ ¿Ã∑¬¿Ã æ¯Ω¿¥œ¥Ÿ.", new Font("Arial", 10), Brushes.Black, new PointF(10, 10));
+                e.Graphics.DrawString("ÎåÄÏ∂ú Ïù¥Î†•Ïù¥ ÏóÜÏäµÎãàÎã§.", new Font("Arial", 10), Brushes.Black, new PointF(10, 10));
                 return;
             }
 
@@ -71,7 +71,7 @@ namespace LibraryProject.Views
                 e.Graphics.DrawRectangle(Pens.Black, 150, currentY, barWidth, barHeight);
                 
                 e.Graphics.DrawString(kvp.Key, new Font("Arial", 9), Brushes.Black, new RectangleF(10, currentY, 130, barHeight), new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center });
-                e.Graphics.DrawString(kvp.Value.ToString() + "±«", new Font("Arial", 9), Brushes.Black, new PointF(150 + barWidth + 5, currentY + barHeight / 2 - 7));
+                e.Graphics.DrawString(kvp.Value.ToString() + "Í∂å", new Font("Arial", 9), Brushes.Black, new PointF(150 + barWidth + 5, currentY + barHeight / 2 - 7));
                 
                 currentY += barHeight + 5;
             }

@@ -2,18 +2,18 @@ using LibraryProject.Views;
 
 namespace LibraryProject.Controllers
 {
-    // »ç¼­(Librarian)ÀÇ µ¿ÀÛÀ» Á¦¾îÇÏ´Â ÄÁÆ®·Ñ·¯ Å¬·¡½º
+    // ì‚¬ì„œ(Librarian)ì˜ ë™ì‘ì„ ì œì–´í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬ í´ë˜ìŠ¤
     public class LibrarianController
     {
         private Views.Librarian _view;
 
-        // »ç¼­ ºä¸¦ È­¸é¿¡ Ç¥½ÃÇÏ´Â ¸Ş¼­µå
+        // ì‚¬ì„œ ë·°ë¥¼ í™”ë©´ì— í‘œì‹œí•˜ëŠ” ë©”ì„œë“œ
         public void ShowLibrarianView()
         {
-            // »õ·Î¿î Librarian ºä ÀÎ½ºÅÏ½º »ı¼º
+            // ìƒˆë¡œìš´ Librarian ë·° ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
             _view = new Librarian();
 
-            // µ¥ÀÌÅÍ ·Îµå
+            // ë°ì´í„° ë¡œë“œ
             var overdueLoans = Models.LoanRecord.GetOverdueLoans();
             _view.DisplayOverdueLoans(overdueLoans);
 
@@ -22,7 +22,7 @@ namespace LibraryProject.Controllers
                 var loans = Models.LoanRecord.GetOverdueLoans();
                 if (loans.Count == 0)
                 {
-                    _view.ShowMessage("¿¬Ã¼ ÁßÀÎ »ç¿ëÀÚ°¡ ¾ø½À´Ï´Ù.");
+                    _view.ShowMessage("ì—°ì²´ ì¤‘ì¸ ì‚¬ìš©ìê°€ ì—†ìŠµë‹ˆë‹¤.");
                     return;
                 }
 
@@ -39,15 +39,15 @@ namespace LibraryProject.Controllers
                 if (emails.Count > 0)
                 {
                     string emailsToNotify = string.Join("\n", emails);
-                    _view.ShowMessage($"´ÙÀ½ ÀÌ¸ŞÀÏ·Î ¿¬Ã¼ ¾Ë¸²À» ¹ß¼ÛÇÕ´Ï´Ù:\n{emailsToNotify}");
+                    _view.ShowMessage($"ë‹¤ìŒ ì´ë©”ì¼ë¡œ ì—°ì²´ ì•Œë¦¼ì„ ë°œì†¡í•©ë‹ˆë‹¤:\n{emailsToNotify}");
                 }
                 else
                 {
-                    _view.ShowMessage("¿¬Ã¼ ÁßÀÎ »ç¿ëÀÚ Áß µî·ÏµÈ ÀÌ¸ŞÀÏÀÌ ¾ø½À´Ï´Ù.");
+                    _view.ShowMessage("ì—°ì²´ ì¤‘ì¸ ì‚¬ìš©ì ì¤‘ ë“±ë¡ëœ ì´ë©”ì¼ì´ ì—†ìŠµë‹ˆë‹¤.");
                 }
             };
 
-            // È­¸é¿¡ Librarian ºä Ãâ·Â
+            // í™”ë©´ì— Librarian ë·° ì¶œë ¥
             _view.Show();
         }
     }

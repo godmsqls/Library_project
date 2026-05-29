@@ -7,11 +7,11 @@ namespace LibraryProject.Models
 {
     public class User
     {
-        public int UserId { get; private set; }        // DB ÀÚµ¿ ºÎ¿© PK
-        public string UserLoginId { get; set; }         // ·Î±×ÀÎ ¾ÆÀÌµğ
+        public int UserId { get; private set; }        // DB ìë™ ë¶€ì—¬ PK
+        public string UserLoginId { get; set; }         // ë¡œê·¸ì¸ ì•„ì´ë””
         public string Password { get; set; }
         public string Name { get; set; }
-        public string Role { get; set; }            //'Member' ¶Ç´Â 'Admin' ¸¸ °¡´É
+        public string Role { get; set; }            //'Member' ë˜ëŠ” 'Admin' ë§Œ ê°€ëŠ¥
         public string Email { get; set; }
         public int? PreferCategory { get; set; }
 
@@ -30,7 +30,7 @@ namespace LibraryProject.Models
             UserId = id;
         }
 
-        // À¯Àú µî·Ï
+        // ìœ ì € ë“±ë¡
         public void InsertUser()
         {
             var conn = Database.Connect();
@@ -46,7 +46,7 @@ namespace LibraryProject.Models
             cmd.ExecuteNonQuery();
         }
 
-        //Login_id ·Î À¯Àú Á¶È¸(¹İÈ¯)
+        //Login_id ë¡œ ìœ ì € ì¡°íšŒ(ë°˜í™˜)
         public static User GetUser(string userLoginId)
         {
             var conn = Database.Connect(); 
@@ -97,19 +97,19 @@ namespace LibraryProject.Models
             return null;
         }
 
-        // ¸ğµç À¯Àú¸¦ ¸®½ºÆ®·Î ¹Ş¾Æ¼­ ¹İÈ¯
+        // ëª¨ë“  ìœ ì €ë¥¼ ë¦¬ìŠ¤íŠ¸ë¡œ ë°›ì•„ì„œ ë°˜í™˜
         public static List<User> GetAllUsers()
         {
-            var users = new List<User>(); //userµéÀÇ ¸®½ºÆ®
-            var conn = Database.Connect(); //Äõ¸® ¸í·É »ı¼º
+            var users = new List<User>(); //userë“¤ì˜ ë¦¬ìŠ¤íŠ¸
+            var conn = Database.Connect(); //ì¿¼ë¦¬ ëª…ë ¹ ìƒì„±
             conn.Open();
             using var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT * FROM users";
 
             using var reader = cmd.ExecuteReader();
-            while (reader.Read()) //Äõ¸® °á°ú¸¦ ÇÑ ÁÙ ¾¿ ÀĞÀ¸¸ç
+            while (reader.Read()) //ì¿¼ë¦¬ ê²°ê³¼ë¥¼ í•œ ì¤„ ì”© ì½ìœ¼ë©°
             {
-                users.Add(new User( //°á°ú¿¡ ÇØ´çÇÏ´Â User °´Ã¼ »ı¼º ÈÄ ¹İÈ¯ -> list¿¡ Ãß°¡
+                users.Add(new User( //ê²°ê³¼ì— í•´ë‹¹í•˜ëŠ” User ê°ì²´ ìƒì„± í›„ ë°˜í™˜ -> listì— ì¶”ê°€
                     userLoginId: reader.GetString("userLoginId"),
                     password: reader.GetString("password"),
                     name: reader.GetString("name"),
@@ -122,18 +122,18 @@ namespace LibraryProject.Models
         }
 
 
-        //À¯Àú ÀüÃ¼ ¸ñ·Ï Ãâ·Â(Å×½ºÆ® ¿ë)
+        //ìœ ì € ì „ì²´ ëª©ë¡ ì¶œë ¥(í…ŒìŠ¤íŠ¸ ìš©)
         public static void PrintAllUsers()
         {
             List<User> users = GetAllUsers();
-            string result = $"=== µî·ÏµÈ À¯Àú ¸ñ·Ï ({users.Count}¸í) ===\n";
+            string result = $"=== ë“±ë¡ëœ ìœ ì € ëª©ë¡ ({users.Count}ëª…) ===\n";
             foreach (var user in users)
-                result += $"ID: {user.UserLoginId} | ÀÌ¸§: {user.Name} | ±ÇÇÑ: {user.Role}\n";
+                result += $"ID: {user.UserLoginId} | ì´ë¦„: {user.Name} | ê¶Œí•œ: {user.Role}\n";
 
             MessageBox.Show(result);
         }
 
-        //À¯Àú ÀüÃ¼ »èÁ¦ (Å×½ºÆ® ¿ë)
+        //ìœ ì € ì „ì²´ ì‚­ì œ (í…ŒìŠ¤íŠ¸ ìš©)
         public static void DeleteAllUsers()
         {
             var conn = Database.Connect();

@@ -7,37 +7,37 @@ namespace LibraryProject.Controllers
 {
     public class UserController
     {
-        // »ç¿ëÀÚ ÀÎÅÍÆäÀÌ½º ºä ÀÎ½ºÅÏ½º 
+        // ì‚¬ìš©ì ì¸í„°í˜ì´ìŠ¤ ë·° ì¸ìŠ¤í„´ìŠ¤ 
         private UserView _view;
-        // ¿ÜºÎ µµ¼­ API ¼­ºñ½º ¿¬µ¿ ÀÎ½ºÅÏ½º
+        // ì™¸ë¶€ ë„ì„œ API ì„œë¹„ìŠ¤ ì—°ë™ ì¸ìŠ¤í„´ìŠ¤
         private AladinApiService _apiService;
-        // µµ¼­°ü µµ¼­ ´ëÃâ/¹İ³³ °ü·Ã ºñÁî´Ï½º ·ÎÁ÷ ¼­ºñ½º ÀÎ½ºÅÏ½º
+        // ë„ì„œê´€ ë„ì„œ ëŒ€ì¶œ/ë°˜ë‚© ê´€ë ¨ ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§ ì„œë¹„ìŠ¤ ì¸ìŠ¤í„´ìŠ¤
         private LibraryService _libraryService;
         private Models.User _user;
 
-        // UserController »ı¼ºÀÚ
+        // UserController ìƒì„±ì
         public UserController(Models.User user = null)
         {
             _user = user;
-            // HttpClient¸¦ ÀÌ¿ëÇØ API ¼­ºñ½º »ı¼º
+            // HttpClientë¥¼ ì´ìš©í•´ API ì„œë¹„ìŠ¤ ìƒì„±
             _apiService = new AladinApiService(new HttpClient());
-            // ¶óÀÌºê·¯¸® ¼­ºñ½º »ı¼º
+            // ë¼ì´ë¸ŒëŸ¬ë¦¬ ì„œë¹„ìŠ¤ ìƒì„±
             _libraryService = new LibraryService();
         }
 
-        // »ç¿ëÀÚ ºä¸¦ È­¸é¿¡ Ç¥½ÃÇÏ´Â ¸Ş¼­µå
+        // ì‚¬ìš©ì ë·°ë¥¼ í™”ë©´ì— í‘œì‹œí•˜ëŠ” ë©”ì„œë“œ
         public void ShowUserView()
         {
-            // ºä ÀÎ½ºÅÏ½º ÃÊ±âÈ­
+            // ë·° ì¸ìŠ¤í„´ìŠ¤ ì´ˆê¸°í™”
             _view = new UserView();
 
-            // ºä¿¡¼­ ¹ß»ıÇÑ SearchRequested ÀÌº¥Æ®¸¦ ´ã´ç ¸Ş¼­µå¿¡ ¿¬°á
+            // ë·°ì—ì„œ ë°œìƒí•œ SearchRequested ì´ë²¤íŠ¸ë¥¼ ë‹´ë‹¹ ë©”ì„œë“œì— ì—°ê²°
             _view.SearchRequested += View_SearchRequested;
-            // ºä¿¡¼­ ¹ß»ıÇÑ CurationRequested ÀÌº¥Æ®¸¦ ´ã´ç ¸Ş¼­µå¿¡ ¿¬°á
+            // ë·°ì—ì„œ ë°œìƒí•œ CurationRequested ì´ë²¤íŠ¸ë¥¼ ë‹´ë‹¹ ë©”ì„œë“œì— ì—°ê²°
             _view.CurationRequested += View_CurationRequested;
-            // ºä¿¡¼­ ¹ß»ıÇÑ LoanRequested ÀÌº¥Æ®¸¦ ´ã´ç ¸Ş¼­µå¿¡ ¿¬°á
+            // ë·°ì—ì„œ ë°œìƒí•œ LoanRequested ì´ë²¤íŠ¸ë¥¼ ë‹´ë‹¹ ë©”ì„œë“œì— ì—°ê²°
             _view.LoanRequested += View_LoanRequested;
-            // ºä¿¡¼­ ¹ß»ıÇÑ ReturnRequested ÀÌº¥Æ®¸¦ ´ã´ç ¸Ş¼­µå¿¡ ¿¬°á
+            // ë·°ì—ì„œ ë°œìƒí•œ ReturnRequested ì´ë²¤íŠ¸ë¥¼ ë‹´ë‹¹ ë©”ì„œë“œì— ì—°ê²°
             _view.ReturnRequested += View_ReturnRequested;
             
             if (_user != null)
@@ -45,14 +45,14 @@ namespace LibraryProject.Controllers
                 _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
             }
 
-            // ºä È­¸éÀ» ¶ç¿ò
+            // ë·° í™”ë©´ì„ ë„ì›€
             _view.Show();
         }
 
-        // µµ¼­ ´ëÃâ ¿äÃ» ½Ã ½ÇÇàµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+        // ë„ì„œ ëŒ€ì¶œ ìš”ì²­ ì‹œ ì‹¤í–‰ë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
         private void View_LoanRequested(object sender, BookItem book)
         {
-            // ¿À·ù°¡ ¹ß»ıÇÒ ¼ö ÀÖ´Â ·ÎÁ÷À» try-catch ºí·ÏÀ¸·Î °¨½Ó
+            // ì˜¤ë¥˜ê°€ ë°œìƒí•  ìˆ˜ ìˆëŠ” ë¡œì§ì„ try-catch ë¸”ë¡ìœ¼ë¡œ ê°ìŒˆ
             try
             {
                 if (_user != null)
@@ -68,25 +68,25 @@ namespace LibraryProject.Controllers
                         book.Description
                     );
                     Models.LoanRecord.InsertLoan(_user.UserId, bookDb, System.DateTime.Now.AddDays(14));
-                    _view.ShowMessage($"'{book.Title}' ÀÌ(°¡) ´ëÃâµÇ¾ú½À´Ï´Ù.");
+                    _view.ShowMessage($"'{book.Title}' ì´(ê°€) ëŒ€ì¶œë˜ì—ˆìŠµë‹ˆë‹¤.");
                     _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
                 }
                 else
                 {
                     _libraryService.LoanBook(book);
-                    _view.ShowMessage($"'{book.Title}' ÀÌ(°¡) ´ëÃâµÇ¾ú½À´Ï´Ù.");
+                    _view.ShowMessage($"'{book.Title}' ì´(ê°€) ëŒ€ì¶œë˜ì—ˆìŠµë‹ˆë‹¤.");
                     _view.DisplayLoans(_libraryService.GetCurrentLoans());
                 }
             }
-            // ¿¡·¯ ¹ß»ı ½Ã ¿¹¿Ü °´Ã¼ Æ÷È¹
+            // ì—ëŸ¬ ë°œìƒ ì‹œ ì˜ˆì™¸ ê°ì²´ í¬íš
             catch (System.Exception ex)
             {
-                // ¿¡·¯ ¸Ş½ÃÁö¸¦ ºä¿¡ Ç¥½Ã
+                // ì—ëŸ¬ ë©”ì‹œì§€ë¥¼ ë·°ì— í‘œì‹œ
                 _view.ShowMessage(ex.Message);
             }
         }
 
-        // µµ¼­ ¹İ³³ ¿äÃ» ½Ã ½ÇÇàµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+        // ë„ì„œ ë°˜ë‚© ìš”ì²­ ì‹œ ì‹¤í–‰ë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
         private void View_ReturnRequested(object sender, string isbn13)
         {
             try
@@ -98,14 +98,14 @@ namespace LibraryProject.Controllers
                     if (recordToReturn != null)
                     {
                         Models.LoanRecord.ReturnBook(recordToReturn.LoanId);
-                        _view.ShowMessage("µµ¼­°¡ ¹İ³³µÇ¾ú½À´Ï´Ù.");
+                        _view.ShowMessage("ë„ì„œê°€ ë°˜ë‚©ë˜ì—ˆìŠµë‹ˆë‹¤.");
                         _view.DisplayLoans(Models.LoanRecord.GetLoansByUser(_user.UserId).FindAll(l => l.ReturnDate == null));
                     }
                 }
                 else
                 {
                     _libraryService.ReturnBook(isbn13);
-                    _view.ShowMessage("µµ¼­°¡ ¹İ³³µÇ¾ú½À´Ï´Ù.");
+                    _view.ShowMessage("ë„ì„œê°€ ë°˜ë‚©ë˜ì—ˆìŠµë‹ˆë‹¤.");
                     _view.DisplayLoans(_libraryService.GetCurrentLoans());
                 }
             }
@@ -115,7 +115,7 @@ namespace LibraryProject.Controllers
             }
         }
 
-        // µµ¼­ °Ë»ö ¿äÃ» ½Ã ºñµ¿±â·Î ½ÇÇàµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+        // ë„ì„œ ê²€ìƒ‰ ìš”ì²­ ì‹œ ë¹„ë™ê¸°ë¡œ ì‹¤í–‰ë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
         private async void View_SearchRequested(object sender, string query)
         {
             if (string.IsNullOrWhiteSpace(query)) return;
@@ -130,11 +130,11 @@ namespace LibraryProject.Controllers
             }
             catch (System.Exception ex)
             {
-                _view.ShowMessage($"µµ¼­ °Ë»ö Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù: {ex.Message}");
+                _view.ShowMessage($"ë„ì„œ ê²€ìƒ‰ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤: {ex.Message}");
             }
         }
 
-        // µµ¼­ ÃßÃµ(Curation) ¿äÃ» ½Ã ½ÇÇàµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+        // ë„ì„œ ì¶”ì²œ(Curation) ìš”ì²­ ì‹œ ì‹¤í–‰ë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
         private void View_CurationRequested(object sender, System.EventArgs e)
         {
             var curationController = new CurationController(_libraryService, _user);

@@ -6,19 +6,19 @@ using System;
 
 namespace LibraryProject.Controllers
 {
-    // »ç¿ëÀÚ ÀÎÁõ °ü·Ã Ã³¸®¸¦ ´ã´çÇÏ´Â ÄÁÆ®·Ñ·¯ Å¬·¡½º
+    // ì‚¬ìš©ì ì¸ì¦ ê´€ë ¨ ì²˜ë¦¬ë¥¼ ë‹´ë‹¹í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬ í´ë˜ìŠ¤
     public class AuthController
     {
-        // ÀÎÁõ È­¸é(·Î±×ÀÎ È­¸é)À» ¶ç¿ì´Â ¸Ş¼­µå
+        // ì¸ì¦ í™”ë©´(ë¡œê·¸ì¸ í™”ë©´)ì„ ë„ìš°ëŠ” ë©”ì„œë“œ
         public void ShowAuthView()
         { 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // ·Î±×ÀÎ È­¸é ºä °´Ã¼ »ı¼º
+            // ë¡œê·¸ì¸ í™”ë©´ ë·° ê°ì²´ ìƒì„±
             var authView = new Auth();
 
-            // È¸¿ø°¡ÀÔ ¿äÃ» ÀÌº¥Æ® Ã³¸®
+            // íšŒì›ê°€ì… ìš”ì²­ ì´ë²¤íŠ¸ ì²˜ë¦¬
             authView.SignUpRequested += (sender, args) =>
             {
                 var signUpView = new SignUp();
@@ -30,48 +30,48 @@ namespace LibraryProject.Controllers
                     {
                         var user = new User(id, password, name, role, email);
                         user.InsertUser();
-                        MessageBox.Show("È¸¿ø°¡ÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.", "¼º°ø", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("íšŒì›ê°€ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", "ì„±ê³µ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         signUpView.Close();
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"È¸¿ø°¡ÀÔ Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù: {ex.Message}", "¿À·ù", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"íšŒì›ê°€ì… ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤: {ex.Message}", "ì˜¤ë¥˜", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 };
                 signUpView.ShowDialog();
             };
 
-            // ºä¿¡¼­ ·Î±×ÀÎ ¿äÃ» ÀÌº¥Æ®°¡ ¹ß»ıÇßÀ» ¶§ Ã³¸®ÇÒ ¶÷´Ù ÀÌº¥Æ® ÇÚµé·¯ µî·Ï
+            // ë·°ì—ì„œ ë¡œê·¸ì¸ ìš”ì²­ ì´ë²¤íŠ¸ê°€ ë°œìƒí–ˆì„ ë•Œ ì²˜ë¦¬í•  ëŒë‹¤ ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ ë“±ë¡
             authView.LoginRequested += (sender, args) => 
             {
-                // Àü´Ş¹ŞÀº ÀÎÀÚ¿¡¼­ ¾ÆÀÌµğ(id)¿Í ºñ¹Ğ¹øÈ£(password) ÃßÃâ
+                // ì „ë‹¬ë°›ì€ ì¸ìì—ì„œ ì•„ì´ë””(id)ì™€ ë¹„ë°€ë²ˆí˜¸(password) ì¶”ì¶œ
                 var (id, password) = args;
 
-                // µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ À¯Àú Á¶È¸
+                // ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ ìœ ì € ì¡°íšŒ
                 var user = User.GetUser(id);
 
-                // À¯Àú°¡ Á¸ÀçÇÏ°í ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
+                // ìœ ì €ê°€ ì¡´ì¬í•˜ê³  ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸
                 if(user != null && user.Password == password)
                 {
                     authView.Hide();
                     if(user.Role == "Admin")
                     {
-                        // »ç¼­ Àü¿ë ÄÁÆ®·Ñ·¯¸¦ »ı¼ºÇÏ°í »ç¼­ ºä¸¦ Ç¥½Ã
+                        // ì‚¬ì„œ ì „ìš© ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ìƒì„±í•˜ê³  ì‚¬ì„œ ë·°ë¥¼ í‘œì‹œ
                         new LibrarianController().ShowLibrarianView();
                     } 
                     else
                     {
-                        // »ç¿ëÀÚ Àü¿ë ÄÁÆ®·Ñ·¯¸¦ »ı¼ºÇÏ°í »ç¿ëÀÚ ºä¸¦ Ç¥½Ã
+                        // ì‚¬ìš©ì ì „ìš© ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ìƒì„±í•˜ê³  ì‚¬ìš©ì ë·°ë¥¼ í‘œì‹œ
                         new UserController(user).ShowUserView();
                     }
                 } 
                 else
                 {
-                    MessageBox.Show("¾ÆÀÌµğ ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ ¿Ã¹Ù¸£Áö ¾Ê½À´Ï´Ù.", "·Î±×ÀÎ ½ÇÆĞ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤.", "ë¡œê·¸ì¸ ì‹¤íŒ¨", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             };
 
-            // »ı¼ºÇÑ authView ÆûÀ» ¸ŞÀÎ ·çÇÁ¿¡ ³Ö¾î ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ½ÇÇà
+            // ìƒì„±í•œ authView í¼ì„ ë©”ì¸ ë£¨í”„ì— ë„£ì–´ ì• í”Œë¦¬ì¼€ì´ì…˜ ì‹¤í–‰
             Application.Run(authView);
         }
     }

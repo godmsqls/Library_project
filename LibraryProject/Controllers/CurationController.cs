@@ -5,39 +5,39 @@ using LibraryProject.Services;
 
 namespace LibraryProject.Controllers
 {
-    // ÃßÃµ µµ¼­ ºä(Curation) ÀÌº¥Æ®¸¦ °üÀåÇÏ´Â ÄÁÆ®·Ñ·¯
+    // ì¶”ì²œ ë„ì„œ ë·°(Curation) ì´ë²¤íŠ¸ë¥¼ ê´€ì¥í•˜ëŠ” ì»¨íŠ¸ë¡¤ëŸ¬
     public class CurationController
     {
-        // Å¥·¹ÀÌ¼Ç ºäÀÇ ÀÎ½ºÅÏ½º
+        // íë ˆì´ì…˜ ë·°ì˜ ì¸ìŠ¤í„´ìŠ¤
         private Curation _view;
-        // µµ¼­ ÃßÃµ ¼­ºñ½º ¿¬°á¿ë ÀÎ½ºÅÏ½º
+        // ë„ì„œ ì¶”ì²œ ì„œë¹„ìŠ¤ ì—°ê²°ìš© ì¸ìŠ¤í„´ìŠ¤
         private RecommendationService _recommendationService;
-        // ´ëÃâ ³»¿ª Á¶È¸ µîÀ» À§ÇÑ ¶óÀÌºê·¯¸® ¼­ºñ½º ÀÎ½ºÅÏ½º
+        // ëŒ€ì¶œ ë‚´ì—­ ì¡°íšŒ ë“±ì„ ìœ„í•œ ë¼ì´ë¸ŒëŸ¬ë¦¬ ì„œë¹„ìŠ¤ ì¸ìŠ¤í„´ìŠ¤
         private LibraryService _libraryService;
         private Models.User _user;
 
-        // CurationController »ı¼ºÀÚ
+        // CurationController ìƒì„±ì
         public CurationController(LibraryService libraryService, Models.User user = null)
         {
             _user = user;
-            // ¿ÜºÎ¿¡¼­ ÁÖÀÔ¹ŞÀº libraryService¸¦ ³»ºÎ¿¡ ÀúÀå
+            // ì™¸ë¶€ì—ì„œ ì£¼ì…ë°›ì€ libraryServiceë¥¼ ë‚´ë¶€ì— ì €ì¥
             _libraryService = libraryService;
-            // Aladin API¸¦ ÀÌ¿ëÇØ µµ¼­ ÃßÃµ ½Ã½ºÅÛ ¼­ºñ½º ÃÊ±âÈ­
+            // Aladin APIë¥¼ ì´ìš©í•´ ë„ì„œ ì¶”ì²œ ì‹œìŠ¤í…œ ì„œë¹„ìŠ¤ ì´ˆê¸°í™”
             _recommendationService = new RecommendationService(new AladinApiService(new HttpClient()));
         }
 
-        // Curation È­¸éÀ» ºñµ¿±âÀûÀ¸·Î º¸¿©ÁÖ´Â ¸Ş¼­µå
+        // Curation í™”ë©´ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
         public async void ShowCurationView()
         {
-            // Å¥·¹ÀÌ¼Ç ºä »ı¼º
+            // íë ˆì´ì…˜ ë·° ìƒì„±
             _view = new Curation();
-            // È­¸é ¶ç¿ì±â
+            // í™”ë©´ ë„ìš°ê¸°
             _view.Show();
 
-            // ÃßÃµ ·ÎÁ÷ ¼öÇà Áß ¿À·ù ¹æÁö¸¦ À§ÇÑ try-catch
+            // ì¶”ì²œ ë¡œì§ ìˆ˜í–‰ ì¤‘ ì˜¤ë¥˜ ë°©ì§€ë¥¼ ìœ„í•œ try-catch
             try
             {
-                // ¶óÀÌºê·¯¸® ¼­ºñ½º¿¡¼­ ÀÌÀü ´ëÃâ ³»¿ª(History)À» °¡Á®¿È
+                // ë¼ì´ë¸ŒëŸ¬ë¦¬ ì„œë¹„ìŠ¤ì—ì„œ ì´ì „ ëŒ€ì¶œ ë‚´ì—­(History)ì„ ê°€ì ¸ì˜´
                 System.Collections.Generic.List<Models.LoanRecord> history;
                 if (_user != null)
                 {
@@ -57,7 +57,7 @@ namespace LibraryProject.Controllers
                             }
                             catch
                             {
-                                // ¹«½ÃÇÏ°í ´ÙÀ½À¸·Î ÁøÇà
+                                // ë¬´ì‹œí•˜ê³  ë‹¤ìŒìœ¼ë¡œ ì§„í–‰
                             }
                         }
                     }
@@ -67,19 +67,19 @@ namespace LibraryProject.Controllers
                     history = _libraryService.GetLoanHistory();
                 }
                 
-                // Á¶È¸µÈ ±â·ÏÀ» Åë°è µ¥ÀÌÅÍ ÇüÅÂ·Î ºä¿¡ Ç¥½Ã
+                // ì¡°íšŒëœ ê¸°ë¡ì„ í†µê³„ ë°ì´í„° í˜•íƒœë¡œ ë·°ì— í‘œì‹œ
                 _view.DisplayStatistics(history);
 
-                // °¡Á®¿Â ´ëÃâ ³»¿ªÀ» ¹ÙÅÁÀ¸·Î ºñµ¿±â·Î ÃßÃµ µµ¼­ ¸ñ·ÏÀ» °¡Á®¿È
+                // ê°€ì ¸ì˜¨ ëŒ€ì¶œ ë‚´ì—­ì„ ë°”íƒ•ìœ¼ë¡œ ë¹„ë™ê¸°ë¡œ ì¶”ì²œ ë„ì„œ ëª©ë¡ì„ ê°€ì ¸ì˜´
                 var recommendations = await _recommendationService.GetRecommendationsAsync(history);
-                // ºä¿¡ ÃßÃµ µµ¼­ ¸ñ·ÏÀ» Àü´ŞÇÏ¿© Ãâ·Â
+                // ë·°ì— ì¶”ì²œ ë„ì„œ ëª©ë¡ì„ ì „ë‹¬í•˜ì—¬ ì¶œë ¥
                 _view.DisplayRecommendations(recommendations);
             }
-            // ¿¹¿Ü ¹ß»ı ½ÃÀÇ catch
+            // ì˜ˆì™¸ ë°œìƒ ì‹œì˜ catch
             catch (Exception ex)
             {
-                // ½ÇÆĞ ¸Ş½ÃÁö¿Í ¿¹¿Ü ¸Ş½ÃÁö¸¦ ºä¿¡ ¶ç¿öÁÜ
-                _view.ShowMessage($"ÃßÃµ µµ¼­¸¦ °¡Á®¿À´Â Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù: {ex.Message}");
+                // ì‹¤íŒ¨ ë©”ì‹œì§€ì™€ ì˜ˆì™¸ ë©”ì‹œì§€ë¥¼ ë·°ì— ë„ì›Œì¤Œ
+                _view.ShowMessage($"ì¶”ì²œ ë„ì„œë¥¼ ê°€ì ¸ì˜¤ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤: {ex.Message}");
             }
         }
     }

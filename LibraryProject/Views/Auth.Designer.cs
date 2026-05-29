@@ -21,14 +21,14 @@ namespace LibraryProject.Views.Auth
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(151, 29);
             label1.TabIndex = 0;
-            label1.Text = "µµº≠ ∞¸∏Æ Ω√Ω∫≈€";
+            label1.Text = "ÎèÑÏÑú Í¥ÄÎ¶¨ ÏãúÏä§ÌÖú";
             // 
             // txtId
             // 
             txtId.Font = new System.Drawing.Font("Noto Sans KR", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 129);
             txtId.Location = new System.Drawing.Point(151, 82);
             txtId.Name = "txtId";
-            txtId.PlaceholderText = "æ∆¿Ãµ";
+            txtId.PlaceholderText = "ÏïÑÏù¥Îîî";
             txtId.Size = new System.Drawing.Size(125, 29);
             txtId.TabIndex = 1;
             // 
@@ -38,7 +38,7 @@ namespace LibraryProject.Views.Auth
             txtPassword.Location = new System.Drawing.Point(151, 122);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.PlaceholderText = "∫Òπ–π¯»£";
+            txtPassword.PlaceholderText = "ÎπÑÎ∞ÄÎ≤àÌò∏";
             txtPassword.Size = new System.Drawing.Size(125, 29);
             txtPassword.TabIndex = 2;
             // 
@@ -50,7 +50,7 @@ namespace LibraryProject.Views.Auth
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(60, 25);
             label2.TabIndex = 3;
-            label2.Text = "æ∆¿Ãµ";
+            label2.Text = "ÏïÑÏù¥Îîî";
             // 
             // label3
             // 
@@ -60,7 +60,7 @@ namespace LibraryProject.Views.Auth
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(76, 25);
             label3.TabIndex = 4;
-            label3.Text = "∫Òπ–π¯»£";
+            label3.Text = "ÎπÑÎ∞ÄÎ≤àÌò∏";
             // 
             // btnLogin
             // 
@@ -71,7 +71,7 @@ namespace LibraryProject.Views.Auth
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new System.Drawing.Size(90, 34);
             btnLogin.TabIndex = 5;
-            btnLogin.Text = "∑Œ±◊¿Œ";
+            btnLogin.Text = "Î°úÍ∑∏Ïù∏";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             //
@@ -84,7 +84,7 @@ namespace LibraryProject.Views.Auth
             btnSignUp.Name = "btnSignUp";
             btnSignUp.Size = new System.Drawing.Size(90, 34);
             btnSignUp.TabIndex = 6;
-            btnSignUp.Text = "»∏ø¯∞°¿‘";
+            btnSignUp.Text = "ÌöåÏõêÍ∞ÄÏûÖ";
             btnSignUp.UseVisualStyleBackColor = false;
             btnSignUp.Click += btnSignUp_Click;
             // 
@@ -99,7 +99,7 @@ namespace LibraryProject.Views.Auth
             Controls.Add(txtId);
             Controls.Add(label1);
             Name = "Auth";
-            Text = "∑Œ±◊¿Œ »≠∏È";
+            Text = "Î°úÍ∑∏Ïù∏ ÌôîÎ©¥";
             ResumeLayout(false);
             PerformLayout();
         }
